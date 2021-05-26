@@ -63,7 +63,7 @@ class Script(object):
         download = requests.get(url_git)
         git.write(download.content)
         git.close()
-
+ 
 
 my_system = Script()
 print(my_system.system)
