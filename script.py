@@ -23,21 +23,35 @@ class Script(object):
             print('Temp does already exist')
 
     def download_and_install_win(self):
+        programs_to_download = []
 
         urls = {'./temp/Python.exe': 'https://www.python.org/ftp/python/3.9.5/python-3.9.5-amd64.exe',
                 './temp/PyCharm.exe': 'http://download.jetbrains.com/python/pycharm-community-2021.1.1.exe?_gl=1*1vc7rdn*_ga*Mjg3NTg4NjkzLjE2MjEzNDQ5MTc.*_ga_V0XZL7QHEB*MTYyMTg1OTAzNi4zLjEuMTYyMTg1OTI4OC4w&_ga=2.209779037.933493779.1621855103-287588693.1621344917',
                 './temp/SublimeMerge.exe': 'https://download.sublimetext.com/sublime_merge_build_2056_x64_setup.exe',
                 './temp/GIT.exe': 'https://github.com/git-for-windows/git/releases/download/v2.31.1.windows.1/Git-2.31.1-64-bit.exe'}
 
-        for prog in urls:
-            program = open(prog, 'wb')
-            download = requests.get(urls[prog])
-            program.write(download.content)
-            program.close()
+        # проверим программы в папке temp
+        programs = os.listdir('./temp')
+        for program in urls:
+            if program in programs:
+                print('{} was downloaded'.format(program))
+            else:
+                programs_to_download.append(program)
 
+
+        for prog in urls:
+            for i in programs_to_download:
+                if prog == i:
+                    program = open(prog, 'wb')
+                    download = requests.get(urls[prog])
+                    program.write(download.content)
+                    program.close()
+
+        programs = os.listdir('./temp')
         os.chdir('./temp')
-        for file in range(0, 4):
-            os.system('*.exe')
+
+        for i in programs:
+            os.system('{}'.format(i))
 
     def install_lin(self):
         os.system('sudo apt install python3')
