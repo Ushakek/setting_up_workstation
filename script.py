@@ -16,17 +16,17 @@ class Script(object):
         elif platform == 'win32':
             self.system = 'Your system is Windows'
 
-        try:
-            os.mkdir('temp')
-        except(FileExistsError):
-            print('Temp does already exist')
-
 
 class ForWidows(Script):
     """
     Сценарий установки для Windows, взаимодействие осуществляется через командную строку
     """
     def download_win(self):
+
+        try:
+            os.mkdir('temp')
+        except(FileExistsError):
+            print('Temp does already exist')
 
         print('Start download!')
 
