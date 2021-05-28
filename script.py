@@ -21,7 +21,7 @@ class ForWidows(Script):
     """
     Сценарий установки для Windows, взаимодействие осуществляется через командную строку
     """
-    def download_win(self):
+    def download(self):
 
         try:
             os.mkdir('temp')
@@ -42,7 +42,7 @@ class ForWidows(Script):
             program.write(download.content)
             program.close()
 
-    def install_win(self):
+    def install(self):
         print('Now we install!')
         # перемешаемся в паку скачанных файлов
         programs = os.listdir('./temp')
@@ -80,7 +80,7 @@ class ForLinux(Script):
     """
     Сценарий установки для Linux, взаимодействие осуществляется через командную строку
     """
-    def install_lin(self):
+    def install(self):
         os.system('sudo apt install python3')
         os.system('sudo apt install snap')
         os.system('sudo apt install git')
@@ -89,6 +89,7 @@ class ForLinux(Script):
 
 def work_with_git():
     # Функция общего сценария для обоих систем
+    print('yeah! we do this!')
     os.system('git config --global http.sslverify false')
     os.system('git clone https://gitlab-srv.corp.npkvip.ru/technological-processes/technological-process-smart-s-is')
 
@@ -98,12 +99,12 @@ def process_of_install():
     print(this_system.system)
     if this_system.system == 'Your system is Windows':
         win = ForWidows()
-        win.download_win()
-        win.install_win()
+        win.download()
+        win.install()
         work_with_git()
     elif this_system.system == 'Your system is Linux':
         lin = ForLinux()
-        lin.install_lin()
+        lin.install()
         work_with_git()
 
 
