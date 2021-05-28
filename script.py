@@ -43,13 +43,13 @@ class ForWidows(Script):
             program.close()
 
     def install(self):
-        print('Now we install!')
         # перемешаемся в паку скачанных файлов
         programs = os.listdir('./temp')
         # запускаем установку
         os.chdir('./temp')
         for program in programs:
             os.system('{}'.format(program))
+        os.chdir('../')
 
     # def check_dir(self):
     #       to_download = []
