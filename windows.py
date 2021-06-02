@@ -96,3 +96,14 @@ class ForWidows(Script):
     #     # создаём список скачанных файлов
     #     # В ПРОЦЕССЕ РАЗРАБОТКИ
     # Нужно попробовать запустить в отдельном файле проверку.
+
+    def set_up(self):
+        obj_system = ForWidows()
+        print(obj_system.system)
+        obj_system.download()
+        obj_system.install()
+        obj_system.reboot()
+
+
+start = ForWidows()
+start.set_up()

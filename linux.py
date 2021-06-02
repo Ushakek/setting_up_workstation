@@ -21,3 +21,13 @@ class ForLinux(Script):
         # os.system('sudo apt update')
         # os.system('sudo apt upgrade')
         print('finished install')
+
+    def set_up(self):
+        obj_system = ForLinux()
+        print(obj_system.system)
+        obj_system.install()
+        obj_system.git_clone()
+
+
+start = ForLinux()
+start.set_up()
