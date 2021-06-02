@@ -46,6 +46,8 @@ class ForWidows(Script):
         # download = requests.get(urls['./temp/GIT.exe'])
         # program.write(download.content)
         # program.close()
+        # выше лишние 4 строки
+
         # Скачиваем файлы
         for path in urls.keys():
             program = open(path, 'wb')
@@ -57,6 +59,7 @@ class ForWidows(Script):
         # перезагрузка командной строки методом запуска новой
         print('Command of reboot cmd')
         try:
+            # Работает только в powershell нужно попробовать "'powershell {}'.format()" и запустить
             subprocess.Popen('{}'.format(work_with_git()), creationflags=subprocess.DETACHED_PROCESS)
         except FileNotFoundError:
             pass
@@ -79,29 +82,30 @@ class ForWidows(Script):
             os.system('{}'.format(program))
         os.chdir('../')
 
+    # ИЗМЕНЁН ПРОЦЕСС ПРОВЕРКИ ДИРЕКТОРИИ, НЕ ТЕСТИЛ
+    # ИЗМЕНЁН ПРОЦЕСС СКАЧИВАНИЯ, НЕ ТЕСТИЛ
     # def check_dir(self):
     #       to_download = []
     #     # проверим программы в папке temp
     #     programs = os.listdir('./temp')
-    #     for program in urls:
+    #     for program in urls.keys():
     #         if program in programs:
     #             print('{} was downloaded'.format(program))
     #         else:
-    #             programs_to_download.append(program)
+    #             to_download.append('./temp/{}'.format(program)) # изменил процесс проверки. не тестил
     #
     #     # скачаем то, что ещё не скачано
     #     # для каждого из пути
-    #     for path in urls.keys():
+    #     # for path in urls.keys():
     #         # для каждого из НЕ скачанного
-    #         for i in to_download:
-    #             # если путь в "НЕ скачанном", то скачиваем
-    #             if path == i:
-    #                 program = open(path, 'wb')
-    #                 download = requests.get(urls[path])
-    #                 program.write(download.content)
-    #                 program.close()
+    #     for path in to_download:
+    #         program = open(path, 'wb')
+    #         download = requests.get(urls[path])
+    #         program.write(download.content)
+    #         program.close()
     #     # создаём список скачанных файлов
     #     # В ПРОЦЕССЕ РАЗРАБОТКИ
+    # Нужно попробовать запустить в отдельном файле проверку.
 
 
 class ForLinux(Script):
