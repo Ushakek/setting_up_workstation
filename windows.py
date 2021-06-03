@@ -14,11 +14,11 @@ class ForWidows(Script):
         скачивание, как значения этих ключей. Запускаются циклом.
         Перед началом цикла создаётся "Временная папка, куда загружаются устоновочные образы
         """
-        print('====Start download!====')
+        print('====Начинаю скачивание!====')
         try:
             os.mkdir('temp')
         except FileExistsError:  # ловим ошибку созданной папки
-            print('Temp does already exist')
+            print('Папка "temp" уже существует!')
             pass
 
 
@@ -27,40 +27,34 @@ class ForWidows(Script):
                 './temp/SublimeMerge.exe': 'https://download.sublimetext.com/sublime_merge_build_2056_x64_setup.exe',
                 './temp/GIT.exe': 'https://github.com/git-for-windows/git/releases/download/v2.31.1.windows.1/Git-2.31.1-64-bit.exe'}
 
-        # program = open('./temp/GIT.exe', 'wb')
-        # download = requests.get(urls['./temp/GIT.exe'])
-        # program.write(download.content)
-        # program.close()
-        # выше лишние 4 строки
-
         # Скачиваем файлы
         for path in urls.keys():
             program = open(path, 'wb')
             download = requests.get(urls[path])
             program.write(download.content)
             program.close()
-        print('====finished download====')
+        print('====Скачивание завершено!====')
 
     def reboot(self):
         # перезагрузка командной строки методом запуска новой
-        print('====Command of reboot cmd====')
+        print('====Перезагрузка командной строки, клонирование репозитория...====')
         obj_git = Script()
         try:
             # Работает только в powershell нужно попробовать "'powershell {}'.format()" и запустить
             subprocess.Popen('{}'.format(obj_git.git_clone()), creationflags=subprocess.DETACHED_PROCESS)
         except FileNotFoundError:
             pass
-        print('====Cmd has been rebooted====')
+        print('====Перезагрузка успешно произведена!====')
 
     def install(self):
         """
         Установка скачанных файлов.
-        Перед циклом создаёт список с программами, которые нужно будет установить, потом перемещется в расположение
+        Перед циклом создаёт список с программами, которые нужно будет установить, потом перемещается в расположение
         скачанных файлов. Далее, используя цикл и автоподстановку запускается процесс установки программ, которые
         регулирует "настройщик"
         """
 
-        print('====Start install!====')
+        print('====Начинаю установку!====')
         # перемешаемся в паку скачанных файлов
         programs = os.listdir('./temp')
         # запускаем установку
@@ -69,10 +63,10 @@ class ForWidows(Script):
         for program in programs:
             os.system('{}'.format(program))
         os.chdir('../')
-        print('Finished install')
+        print('Установка завершена!')
 
-    # ИЗМЕНЁН ПРОЦЕСС ПРОВЕРКИ ДИРЕКТОРИИ, НЕ ТЕСТИЛ
-    # ИЗМЕНЁН ПРОЦЕСС СКАЧИВАНИЯ, НЕ ТЕСТИЛ
+    # todo ИЗМЕНЁН ПРОЦЕСС ПРОВЕРКИ ДИРЕКТОРИИ, НЕ ТЕСТИЛ
+    # todo ИЗМЕНЁН ПРОЦЕСС СКАЧИВАНИЯ, НЕ ТЕСТИЛ
     # def check_dir(self):
     #       to_download = []
     #     # проверим программы в папке temp
@@ -102,7 +96,7 @@ class ForWidows(Script):
         obj_system.download()
         obj_system.install()
         obj_system.reboot()
-        some = input('Installation finished\nPress "ENTER" to exit')
+        some = input('Установка полностью закончена\nНажмите "ENTER" что бы выйти')
 
 
 start = ForWidows()

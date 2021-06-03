@@ -12,7 +12,7 @@ class ForLinux(Script):
         В начале запускается обновление списка пакетов, в конце запускается обновление списка пакетов, а следом
         обновление этих пакетов.
         """
-        print('====Start install====')
+        print('====Начинаю установку!====')
         os.system('sudo apt update')
         os.system('sudo apt install python3')
         os.system('sudo apt install snap')
@@ -20,14 +20,14 @@ class ForLinux(Script):
         os.system('sudo snap install pycharm-community --classic')
         os.system('sudo apt update')
         os.system('sudo apt upgrade')
-        print('====Finished install====')
+        print('====Установка завершена====')
 
     def set_up(self):
         obj_system = ForLinux()
         print(obj_system.system)
         obj_system.install()
         obj_system.git_clone()
-        some = input('Installation finished\nPress "ENTER" to exit')
+        some = input('Установка полностью закончена\nНажмите "ENTER" что бы выйти')
 
 
 start = ForLinux()
