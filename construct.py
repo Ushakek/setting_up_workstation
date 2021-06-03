@@ -14,13 +14,13 @@ class Script(object):
             'linux': 'Linux'
         }
 
-        self.system = 'Your system is {}'.format(system.get(platform, '"Unknown system"'))
+        self.system = '====Your system is {}===='.format(system.get(platform, '"Unknown system"'))
 
     def git_clone(self):
-        print('start cloning')
-        # os.system('git config --global http.sslverify false')
-        # os.system('git clone https://gitlab-srv.corp.npkvip.ru/technological-processes/technological-process-smart-s-is')
-        print('finished cloning')
+        print('====start cloning====')
+        os.system('git config --global http.sslverify false')
+        os.system('git clone https://gitlab-srv.corp.npkvip.ru/technological-processes/technological-process-smart-s-is')
+        print('====finished cloning====')
 
     @abstractmethod
     def install(self):
