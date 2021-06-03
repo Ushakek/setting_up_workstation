@@ -1,1 +1,1 @@
-Thith project for preparation an automated workstations
+This project for preparation an automated workstations
