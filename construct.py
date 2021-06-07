@@ -17,10 +17,10 @@ class Script(object):
         self.system = '==== Ваша система {} ===='.format(system.get(platform, '"Неизвестная система"'))
 
     def git_clone(self):
-        print('==== Начинаю клонирование! ====')
+        print('==== Начинаю копирование! ====')
         os.system('git config --global http.sslverify false')
         os.system('git clone https://gitlab-srv.corp.npkvip.ru/technological-processes/technological-process-smart-s-is')
-        print('==== Клонирование завершено! ====')
+        print('==== Копирование завершено! ====')
 
     @abstractmethod
     def install(self):
