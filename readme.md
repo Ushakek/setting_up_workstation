@@ -1,42 +1,42 @@
-## О проекте
-Этот проект предназначен для подготовк автоматизированного рабочего места
+## Setting Up Workstation
+Этот проект предназначен для подготовки автоматизированного рабочего места
 ## Требования
-Перечисление требуемых пактеов в файлах [requirements](requirements.txt)
+Перечисление требуемых пактеов в файлах [requirements.txt](requirements.txt)
 ## Сборка
 Сборка производится на языке 'python 3.8.5' и выше  
-## Сборка для windows  
+### Сборка для windows  
 Дожны быть установлены:  
 - Powershell  
 - Python 3.8.5 и выше  
 - Pyinstaller  
-- пакеты из  [requirements](requirements.txt)  
+- пакеты из  [requirements.txt](requirements.txt)  
 
-Сборка производится в операционной системе Windows. Для сборки нужны файлы [construt](construct.py) и [windows](windows.py)
+Сборка производится в операционной системе Windows. Для сборки нужны файлы [construt.py](construct.py) и [windows.py](windows.py)
 
 Для сборки:  
 - Открыть powershell и перейти в ту же директорию, где и собираемый файл.  
-- Запустить команду 'pyinstaller --onefile windows.py'  
+- Запустить команду ``` pyinstaller --onefile windows.py ```  
 - Забрать готовый 'windows.exe' из 'dist'  
 
-## Сборка для Linux
+### Сборка для Linux
 Дожны быть установлены:  
 - Python 3.8.5 и выше  
 - Pyinstaller  
-- пакеты из  [requirements](requirements.txt)  
+- пакеты из  [requirements.txt](requirements.txt)  
 
-Сборка производится в операционной системе Linux. Для сборки нужны файлы [construt](construct.py) и [linux](linux.py)
+Сборка производится в операционной системе Linux. Для сборки нужны файлы [construt.py](construct.py) и [linux.py](linux.py)
 
 Для сборки:  
 - Открыть терминал и перейти в ту же директорию, где и собираемый файл.  
-- Запустить команду 'pyinstaller --onefile linux.py'  
+- Запустить команду ``` pyinstaller --onefile linux.py ```  
 - Забрать готовый 'linux' из 'dist'  
 
 ##  Работа с собраным файлом  
 
-## Работа с windows.exe  
+### Работа с windows.exe  
 Данный файл запускается по двойному щечку левой кнопкой мыши, как обычная прграмма. Далее она производит скачивание и установку пакетов. Для настройки во время установки требуется "настройщик"  
 
-## Работа с linux
+### Работа с linux
 Данный файл запускается из терминала:  
 - Открываем терминал  
 - Перемещаемся в в директорию с исполняемым файлом  
