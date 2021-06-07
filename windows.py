@@ -37,7 +37,7 @@ class ForWidows(Script):
         """
         Данный метод создаёт временный файл, для продолжения установки с нужного нам момента(после перезапуска программы)
         """
-        with open('temp.txt', 'w', encoding='utf8') as file:
+        with open('.temp.txt', 'w', encoding='utf8') as file:
             file.write('git_key')
 
     def check_state(self):
@@ -47,7 +47,7 @@ class ForWidows(Script):
         """
         key = 'git_key'
         try:
-            with open('temp.txt', 'r') as file:
+            with open('.temp.txt', 'r') as file:
                 if key in file:
                     return True
         except FileNotFoundError:
@@ -58,7 +58,7 @@ class ForWidows(Script):
         Этот метод нужен для удаления временного файла
         """
         try:
-            os.system('del temp.txt')
+            os.system('del .temp.txt')
         except FileNotFoundError:
             pass
 
@@ -72,6 +72,7 @@ class ForWidows(Script):
 
         print('==== Начинаю установку! ====')
         print('Пожалуйста, настройте устанавливаемые пакеты')
+        print('НЕ ЗАБУДТЬЕ ПОСТАВИТЬ ГАЛОЧКУ ПРИ УСТАНОВКЕ PYTHON "ADD TO PATH" ')
         # перемешаемся в паку скачанных файлов
         programs = os.listdir('./temp')
         # запускаем установку
