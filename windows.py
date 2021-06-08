@@ -113,6 +113,7 @@ class ForWidows(Script):
         else:
             self.git_clone()
             self.rm_state()
+            self.name_arm()
             input('Установка полностью закончена\nНажмите "ENTER" что бы выйти')
 
 
