@@ -26,6 +26,7 @@ class ForLinux(Script):
         print(self.system)
         self.install()
         self.git_clone()
+        self.name_arm()
         input('Установка полностью закончена\nНажмите "ENTER" что бы выйти')
 
 

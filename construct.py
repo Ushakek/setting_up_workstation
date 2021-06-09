@@ -22,6 +22,18 @@ class Script(object):
         os.system('git clone https://gitlab-srv.corp.npkvip.ru/technological-processes/technological-process-smart-s-is')
         print('==== Копирование завершено! ====')
 
+    def name_arm(self):
+        os.chdir('technological-process-smart-s-is')
+        os.system('git checkout develop')
+        arm = 'ARM_'
+        while True:
+            name = input('Введите номер ARM\nARM_')
+            if not name.isdigit():
+                print('Пожалуйста, введите только число!')
+            else:
+                os.system(f'git checkout -b {arm + name}')
+                return False
+
     @abstractmethod
     def install(self):
         pass
