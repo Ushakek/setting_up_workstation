@@ -23,7 +23,7 @@ class ForLinux(Script):
         print('==== Установка завершена ====')
 
     def set_up(self):
-        print(self.system)
+        # print(self.system)
         self.install()
         self.git_clone()
         self.name_arm()
