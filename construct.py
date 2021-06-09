@@ -25,8 +25,14 @@ class Script(object):
     def name_arm(self):
         os.chdir('technological-process-smart-s-is')
         os.system('git checkout develop')
-        name = 'ARM_' + input('Введите номер ARM\nARM_')
-        os.system(f'git checkout -b {name}')
+        arm = 'ARM_'
+        while True:
+            name = input('Введите номер ARM\nARM_')
+            if not name.isdigit():
+                print('Пожалуйста, введите только число!')
+            else:
+                os.system(f'git checkout -b {arm + name}')
+                return False
 
     @abstractmethod
     def install(self):
