@@ -8,10 +8,5 @@ def run():
                 'win32': ForWidows(),
                 'linux': ForLinux()
             }
-
-    if __name__ == '__main__':
-        run_setup = install.get(platform, 'Упс...\nЧто-то пошло не так...')
-        run_setup.set_up()
-
-
-run()
+    run_setup = install.get(platform, 'Упс...\nЧто-то пошло не так...')
+    run_setup.set_up()
