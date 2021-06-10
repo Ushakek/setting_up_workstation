@@ -9,4 +9,7 @@ def run():
                 'linux': ForLinux()
             }
     run_setup = install.get(platform, 'Упс...\nЧто-то пошло не так...')
-    run_setup.set_up()
+    try:
+        run_setup.set_up()
+    except AttributeError:
+        print('Упс...\nЧто-то пошло не так. Обратитесь к разработчику или администратору!')
