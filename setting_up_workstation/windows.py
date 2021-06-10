@@ -1,4 +1,4 @@
-from construct import Script
+from setting_up_workstation.construct import Script
 import os
 import requests
 

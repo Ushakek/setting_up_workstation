@@ -1,5 +1,5 @@
-from linux import ForLinux
-from windows import ForWidows
+from setting_up_workstation.linux import ForLinux
+from setting_up_workstation.windows import ForWidows
 from sys import platform
 
 
