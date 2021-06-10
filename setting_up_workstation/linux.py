@@ -6,6 +6,7 @@ class ForLinux(Script):
     """
     Сценарий установки для Linux, взаимодействие осуществляется через командную строку
     """
+
     def install(self):
         """
         Запускается установка через командную строку, требуется ввод пароля администратора
@@ -23,7 +24,8 @@ class ForLinux(Script):
         print('==== Установка завершена ====')
 
     def set_up(self):
-        print(self.system)
+        __system = 'Linux'
+        print(self.system.format(__system))
         self.install()
         self.git_clone()
         self.name_arm()

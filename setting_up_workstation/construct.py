@@ -1,4 +1,3 @@
-from sys import platform
 from abc import abstractmethod
 import os
 
@@ -7,14 +6,8 @@ class Script(object):
     """
     Класс с конструктором. Родитель остальных классов. В нём находится определитель системы.
     """
-    def __init__(self):
 
-        system = {
-            'win32': 'Windows',
-            'linux': 'Linux'
-        }
-
-        self.system = '==== Ваша система {} ===='.format(system.get(platform, '"Неизвестная система"'))
+    system = '==== Ваша система {} ===='
 
     def git_clone(self):
         print('==== Начинаю копирование! ====')

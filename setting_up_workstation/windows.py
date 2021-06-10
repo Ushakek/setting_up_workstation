@@ -105,7 +105,8 @@ class ForWidows(Script):
 
     def set_up(self):
         if not self.check_state():
-            print(self.system)
+            __system = 'Windows'
+            print(self.system.format(__system))
             self.download()
             self.install()
             self.state()
