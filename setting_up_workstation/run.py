@@ -8,8 +8,12 @@ def run():
                 'win32': ForWidows(),
                 'linux': ForLinux()
             }
-    run_setup = install.get(platform, 'Упс...\nЧто-то пошло не так...')
-    try:
-        run_setup.set_up()
-    except AttributeError:
+
+    if platform in install:
+        install[platform].set_up()
+    else:
         print('Упс...\nЧто-то пошло не так. Обратитесь к разработчику или администратору!')
+
+
+if __name__ == '__main__':
+    run()
