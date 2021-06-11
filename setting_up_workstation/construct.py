@@ -28,7 +28,11 @@ class Script(object):
             if not number_of_arm.isdigit():
                 print('Пожалуйста, введите только число!')
             else:
-                os.system(f'git checkout -b {prefix_arm + number_of_arm}')
+                arm_name = prefix_arm + number_of_arm
+                os.system(f'git config --global user.name {arm_name}')
+                os.system(f'git config --global user.email {arm_name}@zaovip.ru')
+                os.system(f'git checkout -b {arm_name}')
+
                 return False
 
     @abstractmethod
