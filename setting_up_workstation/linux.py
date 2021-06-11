@@ -15,6 +15,8 @@ class ForLinux(Script):
         """
         print('==== Начинаю установку! ====')
         os.system('sudo apt update')
+        os.system('sudo killall apt')
+        os.system('sudo apt install virtualenv')
         os.system('sudo apt install python3')
         os.system('sudo apt install snap')
         os.system('sudo apt install git')
