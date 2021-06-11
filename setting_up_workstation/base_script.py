@@ -2,12 +2,12 @@ from abc import abstractmethod
 import os
 
 
-class Script(object):
+class Script:
     """
     Класс с конструктором. Родитель остальных классов. В нём находится определитель системы.
     """
 
-    system = '==== Ваша система {} ===='
+    _user_system_text = '==== Ваша система {} ===='
 
     def git_clone(self):
         print('==== Начинаю копирование! ====')
@@ -27,6 +27,7 @@ class Script(object):
             number_of_arm = input('Введите номер ARM\nARM_')
             if not number_of_arm.isdigit():
                 print('Пожалуйста, введите только число!')
+                continue
             else:
                 arm_name = prefix_arm + number_of_arm
                 os.system(f'git config --global user.name {arm_name}')

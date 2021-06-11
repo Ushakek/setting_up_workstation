@@ -1,4 +1,4 @@
-from setting_up_workstation.construct import Script
+from setting_up_workstation.base_script import Script
 import os
 
 
@@ -27,7 +27,7 @@ class ForLinux(Script):
 
     def set_up(self):
         __system = 'Linux'
-        print(self.system.format(__system))
+        print(self._user_system_text.format(__system))
         self.install()
         self.git_clone()
         self.name_arm()

@@ -4,15 +4,15 @@ from sys import platform
 
 
 def run():
-    install = {
+    available_systems = {
                 'win32': ForWidows(),
                 'linux': ForLinux()
             }
 
-    if platform in install:
-        install[platform].set_up()
+    if platform in available_systems:
+        available_systems[platform].set_up()
     else:
-        print('Упс...\nЧто-то пошло не так. Обратитесь к разработчику или администратору!')
+        print(f'Ваша платформа не поддерживается, ваша:\n {platform}\nДоступные: {available_systems.values()}')
 
 
 if __name__ == '__main__':

@@ -1,4 +1,4 @@
-from setting_up_workstation.construct import Script
+from setting_up_workstation.base_script import Script
 import os
 import requests
 
@@ -106,7 +106,7 @@ class ForWidows(Script):
     def set_up(self):
         if not self.check_state():
             __system = 'Windows'
-            print(self.system.format(__system))
+            print(self._user_system_text.format(__system))
             self.download()
             self.install()
             self.state()
