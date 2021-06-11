@@ -7,6 +7,14 @@ class ForLinux(Script):
     Сценарий установки для Linux, взаимодействие осуществляется через командную строку
     """
 
+    def sudo_check(self):
+        result = os.system('sudo apt update')
+        if result == 256:
+            print('Отмена установки.\nВведён неверный пароль!')
+            return False
+        else:
+            return True
+
     def install(self):
         """
         Запускается установка через командную строку, требуется ввод пароля администратора
@@ -14,7 +22,6 @@ class ForLinux(Script):
         обновление этих пакетов.
         """
         print('==== Начинаю установку! ====')
-        os.system('sudo apt update')
         os.system('sudo killall apt')
         os.system('sudo apt install virtualenv')
         os.system('sudo apt install python3')
@@ -28,7 +35,8 @@ class ForLinux(Script):
     def set_up(self):
         __system = 'Linux'
         print(self._user_system_text.format(__system))
-        self.install()
-        self.git_clone()
-        self.name_arm()
-        input('Установка полностью закончена\nНажмите "ENTER" что бы выйти')
+        if self.sudo_check():
+            self.install()
+            self.git_clone()
+            self.name_arm()
+            input('Установка полностью закончена\nНажмите "ENTER" что бы выйти')
