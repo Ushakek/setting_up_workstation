@@ -52,7 +52,7 @@ class ForLinux(Script):
 
     def set_up(self):
         __system = 'Linux'
-        print(self._user_system_text.format(__system))
+        self.print_system(__system)
         if not self.sudo_check():
             self.install()
             self.git_clone()

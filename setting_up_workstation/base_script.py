@@ -7,7 +7,8 @@ class Script:
     Класс с конструктором. Родитель остальных классов. В нём находится определитель системы.
     """
 
-    _user_system_text = '==== Ваша система {} ===='
+    def print_system(self, user_system):
+        print(f'==== Ваша система {user_system} ====')
 
     def git_clone(self):
         print('==== Начинаю копирование! ====')
