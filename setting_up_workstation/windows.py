@@ -1,6 +1,6 @@
 from setting_up_workstation.base_script import Script
 import os
-# import requests
+import requests
 
 
 class ForWidows(Script):
@@ -128,7 +128,7 @@ class ForWidows(Script):
             self.state()
             input('=== Установка не завершена, пожалуйста, перезапустите программу, что бы продолжить установку ===')
         else:
-            self.git_clone()
+            self.check_git_authentication()
             self.rm_state()
             self.name_arm()
             self.requirements()

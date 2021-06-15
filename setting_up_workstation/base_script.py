@@ -1,5 +1,6 @@
 from abc import abstractmethod
 import os
+import sys
 
 
 class Script:
@@ -10,11 +11,24 @@ class Script:
     def print_system(self, user_system):
         print(f'==== Ваша система {user_system} ====')
 
-    def git_clone(self):
+    def check_git_authentication(self):
         print('==== Начинаю копирование! ====')
+        result = 1
+        count = 3
+        while result != 0 and count != 0:
+            result = self.git_clone()
+            count -= 1
+
+        if result != 0:
+            sys.exit('something problems')
+        else:
+            print('==== Копирование завершено! ====')
+
+    def git_clone(self):
+        # print('==== Начинаю копирование! ====')
         os.system('git config --global http.sslverify false')
         os.system('git clone https://gitlab-srv.corp.npkvip.ru/technological-processes/technological-process-smart-s-is')
-        print('==== Копирование завершено! ====')
+        # print('==== Копирование завершено! ====')
 
     def name_arm(self):
         """

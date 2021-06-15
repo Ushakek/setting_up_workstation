@@ -15,6 +15,12 @@ class ForLinux(Script):
             print('Отмена установки.\nВведён неверный пароль!')
             return True
 
+    def try_install(self, command):
+        try:
+            os.system(command)
+        except Exception as e:
+            print(e)
+
     def install(self):
         """
         Запускается установка через командную строку, требуется ввод пароля администратора
@@ -22,14 +28,14 @@ class ForLinux(Script):
         обновление этих пакетов.
         """
         print('==== Начинаю установку! ====')
-        os.system('sudo killall apt')
-        os.system('sudo apt install python3')
-        os.system('sudo apt install virtualenv')
-        os.system('sudo apt install snap')
-        os.system('sudo apt install git')
-        os.system('sudo snap install pycharm-community --classic')
-        os.system('sudo killall apt')
-        os.system('sudo apt update')
+        self.try_install('sudo killall apt')
+        self.try_install('sudo apt install python3')
+        self.try_install('sudo apt install virtualenv')
+        self.try_install('sudo apt install snap')
+        self.try_install('sudo apt install git')
+        self.try_install('sudo snap install pycharm-community --classic')
+        self.try_install('sudo killall apt')
+        self.try_install('sudo apt update')
         print('==== Установка завершена ====')
 
     def requirements(self):
@@ -55,7 +61,7 @@ class ForLinux(Script):
         self.print_system(__system)
         if not self.sudo_check():
             self.install()
-            self.git_clone()
+            self.check_git_authentication()
             self.name_arm()
             self.requirements()
             self.update_tp()
