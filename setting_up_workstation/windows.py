@@ -1,6 +1,6 @@
 from setting_up_workstation.base_script import Script
 import os
-import requests
+# import requests
 
 
 class ForWidows(Script):
@@ -80,7 +80,23 @@ class ForWidows(Script):
         for program in programs:
             os.system('{}'.format(program))
         os.chdir('../')
+        os.system('python -m venv .venv')
         print('=== Установка завершена! ===')
+
+    def requirements(self):
+        with open(r'.\technological-process-smart-s-is\update_requirements.bat', 'w', encoding='utf8') as file:
+            file.write('.venv\Scripts\python.exe -m pip install -r requirements.txt --force-reinstall\npause')
+
+    def update_tp(self):
+        with open(r'.\technological-process-smart-s-is\update_tp.bat', 'w', encoding='utf8') as file:
+            file.write('git pull origin master develop')
+
+    def run_tp(self):
+        with open(r'.\technological-process-smart-s-is\run_tp.bat', 'w', encoding='utf8') as file:
+            file.write(r'''setlocal
+            set PYTHONPATH=%cd%
+            .venv\Scripts\python.exe smart_s_is\run.py
+            endlocal''')
 
     # todo ИЗМЕНЁН ПРОЦЕСС ПРОВЕРКИ ДИРЕКТОРИИ, НЕ ТЕСТИЛ
     # todo ИЗМЕНЁН ПРОЦЕСС СКАЧИВАНИЯ, НЕ ТЕСТИЛ
@@ -97,7 +113,7 @@ class ForWidows(Script):
             if program in programs:
                 print('{} was downloaded'.format(program))
             else:
-                to_download.append('./temp/{}'.format(program)) # изменил процесс проверки. не тестил
+                to_download.append('./temp/{}'.format(program))  # изменил процесс проверки. не тестил
         return to_download
     #     # создаём список скачанных файлов
     #     # В ПРОЦЕССЕ РАЗРАБОТКИ
@@ -115,4 +131,7 @@ class ForWidows(Script):
             self.git_clone()
             self.rm_state()
             self.name_arm()
+            self.requirements()
+            self.update_tp()
+            self.run_tp()
             input('Установка полностью закончена\nНажмите "ENTER" что бы выйти')

@@ -9,10 +9,10 @@ class ForLinux(Script):
 
     def sudo_check(self):
         result = os.system('sudo apt update')
-        if result == 256:
-            print('Отмена установки.\nВведён неверный пароль!')
+        if result == 25600:
             return False
         else:
+            print('Отмена установки.\nВведён неверный пароль!')
             return True
 
     def install(self):
@@ -23,20 +23,42 @@ class ForLinux(Script):
         """
         print('==== Начинаю установку! ====')
         os.system('sudo killall apt')
-        os.system('sudo apt install virtualenv')
         os.system('sudo apt install python3')
+        os.system('sudo apt install virtualenv')
         os.system('sudo apt install snap')
         os.system('sudo apt install git')
         os.system('sudo snap install pycharm-community --classic')
+        os.system('sudo killall apt')
         os.system('sudo apt update')
-        os.system('sudo apt upgrade')
         print('==== Установка завершена ====')
+
+    def requirements(self):
+        os.system('virtualenv ./technological-process-smart-s-is/.venv ')
+        with open('./technological-process-smart-s-is/update_requirements.sh', 'w', encoding='utf8') as file:
+            file.write('.venv/bin/python3 -m pip install -r requirements.txt --force-reinstall')
+        os.system('chmod u+x ./technological-process-smart-s-is/update_requirements.sh')
+
+    def update_tp(self):
+        with open('./technological-process-smart-s-is/update_tp.sh', 'w', encoding='utf8') as file:
+            file.write('git pull origin master develop')
+        os.system('chmod u+x ./technological-process-smart-s-is/update_tp.sh')
+
+    def run_tp(self):
+        with open('./technological-process-smart-s-is/run_tp.sh', 'w', encoding='utf8') as file:
+            file.write('''source .venv/bin/activate
+            export PYTHONPATH=$PYTHONPATH:./
+            python3 ./smart_s_is/run.py''')
+        os.system('chmod u+x ./technological-process-smart-s-is/run_tp.sh')
 
     def set_up(self):
         __system = 'Linux'
         print(self._user_system_text.format(__system))
-        if self.sudo_check():
+        if not self.sudo_check():
             self.install()
             self.git_clone()
             self.name_arm()
+            self.requirements()
+            self.update_tp()
+            self.run_tp()
+
             input('Установка полностью закончена\nНажмите "ENTER" что бы выйти')

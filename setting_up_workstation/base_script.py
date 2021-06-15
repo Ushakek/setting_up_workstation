@@ -43,3 +43,15 @@ class Script:
     @abstractmethod
     def set_up(self):
         pass
+
+    @abstractmethod
+    def requirements(self):
+        pass
+
+    @abstractmethod
+    def update_tp(self):
+        pass
+
+    @abstractmethod
+    def run_tp(self):
+        pass
