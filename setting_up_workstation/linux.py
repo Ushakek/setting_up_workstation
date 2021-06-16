@@ -62,7 +62,7 @@ class ForLinux(Script):
         if not self.sudo_check():
             self.install()
             self.check_git_authentication()
-            self.name_arm()
+            self.git_config()
             self.requirements()
             self.update_tp()
             self.run_tp()

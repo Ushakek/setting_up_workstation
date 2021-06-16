@@ -130,7 +130,7 @@ class ForWidows(Script):
         else:
             self.check_git_authentication()
             self.rm_state()
-            self.name_arm()
+            self.git_config()
             self.requirements()
             self.update_tp()
             self.run_tp()
