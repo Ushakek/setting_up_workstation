@@ -79,6 +79,8 @@ class Script:
             os.system(f'git config --global user.name {branch_name}')
             os.system(f'git config --global user.email {branch_name}@zaovip.ru')
             os.system(f'git checkout {branch_name}')
+        os.chdir('..')
+
 
     @abstractmethod
     def install(self):

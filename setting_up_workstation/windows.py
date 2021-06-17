@@ -39,6 +39,7 @@ class ForWidows(Script):
         """
         with open('.temp.txt', 'w', encoding='utf8') as file:
             file.write('git_key')
+        os.system('attrib +h ".temp.txt"')
 
     def check_state(self):
         """
@@ -58,6 +59,7 @@ class ForWidows(Script):
         Этот метод нужен для удаления временного файла
         """
         try:
+            os.system('attrib -h ".temp.txt"')
             os.system('del .temp.txt')
         except FileNotFoundError:
             pass
@@ -80,10 +82,10 @@ class ForWidows(Script):
         for program in programs:
             os.system('{}'.format(program))
         os.chdir('../')
-        os.system('python -m venv .venv')
         print('=== Установка завершена! ===')
 
     def requirements(self):
+        os.system('python -m venv ./technological-process-smart-s-is/.venv')
         with open(r'.\technological-process-smart-s-is\update_requirements.bat', 'w', encoding='utf8') as file:
             file.write('.venv\Scripts\python.exe -m pip install -r requirements.txt --force-reinstall\npause')
 
