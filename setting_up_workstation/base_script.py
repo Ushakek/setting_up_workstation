@@ -81,6 +81,25 @@ class Script:
             os.system(f'git checkout {branch_name}')
         os.chdir('..')
 
+    def setup_menu(self):
+
+        set_up_script = input('''Выберите вариант установки:
+            1) Полная установка
+            2) Без установки программ(скопировать проект, добавить скрипты)
+            3) Добавить только скрипты\nНапишите номер варианта(1, 2, 3): ''')
+
+        while True:
+            if not set_up_script.isdigit():
+                set_up_script = input('Повторите ввод, только число от 1 до 3: ')
+                continue
+            elif int(set_up_script) not in range(1, 4):
+                set_up_script = input('Повторите ввод, только число от 1 до 3: ')
+                continue
+            else:
+                break
+
+        set_up_script = int(set_up_script)
+        return set_up_script
 
     @abstractmethod
     def install(self):

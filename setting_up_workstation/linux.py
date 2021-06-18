@@ -9,7 +9,7 @@ class ForLinux(Script):
 
     def sudo_check(self):
         result = os.system('sudo apt update')
-        if result == 25600:
+        if bool(result) is False:
             return False
         else:
             print('Отмена установки.\nВведён неверный пароль!')
@@ -56,15 +56,38 @@ class ForLinux(Script):
             python3 ./smart_s_is/run.py''')
         os.system('chmod u+x ./technological-process-smart-s-is/run_tp.sh')
 
+    def full_setup(self):
+        self.install()
+        self.check_git_authentication()
+        self.git_config()
+        self.requirements()
+        self.update_tp()
+        self.run_tp()
+
+    def base_setup(self):
+        self.check_git_authentication()
+        self.git_config()
+        self.requirements()
+        self.update_tp()
+        self.run_tp()
+
+    def minimal_setup(self):
+        self.requirements()
+        self.update_tp()
+        self.run_tp()
+
+    def setup_choice(self, temp):
+        if temp == 1:
+            self.full_setup()
+        elif temp == 2:
+            self.base_setup()
+        elif temp == 3:
+            self.minimal_setup()
+
     def set_up(self):
+        value = self.setup_menu()
         __system = 'Linux'
         self.print_system(__system)
         if not self.sudo_check():
-            self.install()
-            self.check_git_authentication()
-            self.git_config()
-            self.requirements()
-            self.update_tp()
-            self.run_tp()
-
+            self.setup_choice(value)
             input('Установка полностью закончена\nНажмите "ENTER" что бы выйти')
