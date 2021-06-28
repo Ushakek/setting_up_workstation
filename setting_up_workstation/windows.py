@@ -1,6 +1,7 @@
 from setting_up_workstation.base_script import Script
 import os
 import requests
+from platform import release
 
 
 class ForWidows(Script):
@@ -8,6 +9,17 @@ class ForWidows(Script):
 
     Сценарий установки для Windows, взаимодействие осуществляется через командную строку
     """
+
+    def check_version_win(self):
+        """ Метод определения версии системы
+
+        Определение версии windows (7/10)
+        Returns:
+            version: строковый аргумент с версией системы '7'/'10'
+        """
+
+        version = release()
+        return version
 
     def check_dir(self, urls):
         """ Метод для проверки уже скачанных программ
@@ -48,6 +60,9 @@ class ForWidows(Script):
                 './temp/PyCharm.exe': 'http://download.jetbrains.com/python/pycharm-community-2021.1.1.exe?_gl=1*1vc7rdn*_ga*Mjg3NTg4NjkzLjE2MjEzNDQ5MTc.*_ga_V0XZL7QHEB*MTYyMTg1OTAzNi4zLjEuMTYyMTg1OTI4OC4w&_ga=2.209779037.933493779.1621855103-287588693.1621344917',
                 './temp/SublimeMerge.exe': 'https://download.sublimetext.com/sublime_merge_build_2056_x64_setup.exe',
                 './temp/GIT.exe': 'https://github.com/git-for-windows/git/releases/download/v2.31.1.windows.1/Git-2.31.1-64-bit.exe'}
+
+        if self.check_version_win() == '7':
+            urls.update({'./temp/Python.exe': 'https://www.python.org/ftp/python/3.8.10/python-3.8.10-amd64.exe'})
 
         # Скачиваем файлы
         need_download = self.check_dir(urls)
