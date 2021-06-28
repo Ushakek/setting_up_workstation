@@ -46,7 +46,7 @@ class ForLinux(Script):
         print('==== Начинаю установку! ====')
         self.try_install('sudo killall apt')
         self.try_install('sudo apt install python3')
-        self.try_install('sudo apt install virtualenv')
+        self.try_install('sudo apt-get install python3.9.*')
         self.try_install('sudo apt install snap')
         self.try_install('sudo apt install git')
         self.try_install('sudo snap install pycharm-community --classic')
@@ -60,7 +60,7 @@ class ForLinux(Script):
             Создаёт sh файл, который устанавливает зависимости
         """
 
-        os.system('virtualenv ./technological-process-smart-s-is/.venv ')
+        os.system('python3.9 -m venv ./technological-process-smart-s-is/.venv ')
         with open('./technological-process-smart-s-is/update_requirements.sh', 'w', encoding='utf8') as file:
             file.write('.venv/bin/python3 -m pip install -r requirements.txt --force-reinstall')
         os.system('chmod u+x ./technological-process-smart-s-is/update_requirements.sh')

@@ -10,7 +10,7 @@
 - Pyinstaller  
 - пакеты из  [requirements.txt](requirements.txt)  
 
-Сборка производится в операционной системе Windows 7(x32). 
+Сборка производится в операционной системе Windows 7(x64). 
 
 Для сборки:  
 - Переходим в ./buid_scripts/build_windows  
