@@ -143,7 +143,7 @@ class Script:
             путь до него.
         """
 
-        for root, dirs, files in os.walk('./'):
+        for root, dirs, files in os.walk(f'./{self._path_to_script}'):
             try:
                 dirs.remove('.venv')
             except ValueError:
