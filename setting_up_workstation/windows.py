@@ -139,8 +139,8 @@ class ForWidows(Script):
         Создаёт bat файл, который устанавливает зависимости
         """
 
-        os.system('python -m venv ./technological-process-smart-s-is/.venv')
-        with open(r'.\technological-process-smart-s-is\update_requirements.bat', 'w', encoding='utf8') as file:
+        os.system(f'python -m venv ./{self._path_to_script}/.venv')
+        with open(rf'.\{self._path_to_script}\update_requirements.bat', 'w', encoding='utf8') as file:
             file.write('.venv\Scripts\python.exe -m pip install -r requirements.txt --force-reinstall\n@pause')
 
     def update_tp(self):
@@ -149,7 +149,7 @@ class ForWidows(Script):
         Создаёт bat файл, который обновляет тех процесс
         """
 
-        with open(r'.\technological-process-smart-s-is\update_tp.bat', 'w', encoding='utf8') as file:
+        with open(rf'.\{self._path_to_script}\update_tp.bat', 'w', encoding='utf8') as file:
             file.write('git pull origin master develop\n@pause')
 
     def run_tp(self):
@@ -158,10 +158,10 @@ class ForWidows(Script):
         Создаёт bat файл, который устанавливает зависимости
         """
 
-        with open(r'.\technological-process-smart-s-is\run_tp.bat', 'w', encoding='utf8') as file:
-            file.write(r'''setlocal
+        with open(rf'.\{self._path_to_script}\run_tp.bat', 'w', encoding='utf8') as file:
+            file.write(fr'''setlocal
             set PYTHONPATH=%cd%
-            .venv\Scripts\python.exe smart_s_is\run.py
+            .venv\Scripts\python.exe {self.find_run()}\run.py
             endlocal
             @pause''')
 

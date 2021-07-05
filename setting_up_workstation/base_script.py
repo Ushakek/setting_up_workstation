@@ -2,6 +2,7 @@ from abc import abstractmethod
 from subprocess import Popen, PIPE
 from sys import exit
 import os
+import requests
 
 
 class Script:
@@ -10,6 +11,9 @@ class Script:
     Этот клас содержит базовые методы работы скрипта, а так же описание обязательных методов у "Предков"
 
     """
+    _dict_prj = {}
+    _path_to_script = ''
+    _path_to_run = ''
 
     def print_system(self, user_system):
         """ Печать названия системы
@@ -21,32 +25,133 @@ class Script:
 
         print(f'==== Ваша система {user_system} ====')
 
+    def check_directory(self):
+        """Метод для проверки директории на наличие проекта
+
+        Returns:
+            булевый аргумент для обработки
+        """
+
+        for root, dirs, files in os.walk('./'):
+            if self._path_to_script in dirs:
+                return True
+
+    def choice_project(self):
+        self.get_projects()
+        url = self.get_url_project(self._dict_prj)
+        if self.check_directory():
+            return None
+        else:
+            return url
+
     def check_git_authentication(self):
         """ Проверка авторизации git
 
         Проверяет пользовательскую авторизацию в git. Если в течении 3-х попыток у пользователя не удалось
         авторизоваться - прекращает выполнение программы
         """
+        url = self.choice_project()
+        # if not url:
+        #     return None
 
         print('==== Начинаю копирование! ====')
         result = True
         count = 3
         while result is not False and count != 0:
-            result = bool(self.git_clone())
+            result = bool(self.git_clone(url))
             count -= 1
             continue
 
         if result is not False:
-            exit('Не удалось авторизоваться!')
+            input('Не удалось авторизоваться!\n Нажмите Enter, что бы выйти.')
+            exit()
         else:
             print('==== Копирование завершено! ====')
 
-    def git_clone(self):
+    def get_projects(self):
+        """Метод для поучения списка проектов
+
+        Отправляет запрос на gitlab api, получает значения в виде словаря, который преобразует в словарь с "полезными данными"
+
+        Returns:
+            status_code: возвращает код выполнения
+            Обновляет словарь
+            _dict_prj: пара в виде:
+                                   индекс: {
+                                   'id': id проекта
+                                   'name': имя проекта на русском
+                                   'url': ссылка на доступ к проекту
+                                   'path': наименование проекта на ангилийском
+                                   }
+        """
+        _params = {'access_token': 'rgTD5jAxQycgx2XkNtef'}
+        try:
+            full_page = requests.get('https://gitlab-srv.corp.npkvip.ru/api/v4/groups/88/projects',
+                                     verify=False, params=_params)
+
+            if not full_page.status_code == 200:
+                return full_page.status_code, full_page.text
+
+            projects = full_page.json()
+            for count, project in enumerate(projects, 1):
+                self._dict_prj.update({
+                    str(count): {
+                        'id': project['id'],
+                        'name': project['description'],
+                        'url': project['web_url'],
+                        'path': project['path'],
+                    }
+                })
+            return full_page.status_code
+
+        except Exception as Err:
+            return Err, print(f'Что-то пошло не так: {Err}')
+
+    def get_url_project(self, projects):
+        """Метод для выбора проекта
+
+        Показывает пользователю, какие проекты сейчас доступны для клонирования и даёт выбор по индексу
+        Returns:
+            projects[index_project]['url']: url проекта, по которому его можно склонировать
+        """
+        for project in projects:
+            print(f'{project}: {projects[project]["name"]}')
+        while True:
+            index_project = input('Выберите проект: ')
+            if not index_project.isdigit() or index_project not in projects.keys():
+                print('Введите только индекс проекта!')
+                continue
+            else:
+                self._path_to_script = projects[index_project]['path']
+                break
+        return projects[index_project]['url']
+
+    def git_clone(self, url):
         """ Клонирование репозитория git
         """
         os.system('git config --global http.sslverify false')
-        system_code = os.system('git clone https://gitlab-srv.corp.npkvip.ru/technological-processes/technological-process-smart-s-is')
+        system_code = os.system(f'git clone {url}')
         return system_code
+
+    def find_run(self):
+        """Метод для поиска пути к стартовому файлу
+
+        Returns:
+             self._path_to_run: обновлённый путь до "бегущего" скрипта
+        Problems:
+            Возвращает первое вхождение => если есть установленные библиотеки, то может в них найти run.py и вернуть
+            путь до него.
+        """
+
+        for root, dirs, files in os.walk('./'):
+            try:
+                dirs.remove('.venv')
+            except ValueError:
+                pass
+            if 'run.py' in files:
+                self._path_to_run = os.path.join(root).replace(f'./{self._path_to_script}\\', '')
+                self._path_to_run = os.path.join(root).replace(f'./{self._path_to_script}/', '')
+                return self._path_to_run
 
     def create_name(self):
         """ Создание имени ветки
@@ -100,7 +205,7 @@ class Script:
         Проверка, запускает методы проверки на ввод имени. Поиск совпадений имён
         """
 
-        os.chdir('technological-process-smart-s-is')
+        os.chdir(f'{self._path_to_script}')
         os.system('git checkout develop')
         arm_name = self.create_name()
         branch_name = self.check_name(arm_name)
@@ -156,4 +261,16 @@ class Script:
 
     @abstractmethod
     def run_tp(self):
+        pass
+
+    @abstractmethod
+    def full_setup(self):
+        pass
+
+    @abstractmethod
+    def base_setup(self):
+        pass
+
+    @abstractmethod
+    def minimal_setup(self):
         pass
