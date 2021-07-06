@@ -8,14 +8,33 @@ class ForLinux(Script):
     Сценарий установки для Linux, взаимодействие осуществляется через командную строку
     """
 
+    command_list = [
+        'sudo apt-get install snap',
+    ]
+
+    def update_install(self):
+        self.install_list()
+        for program in self._list_programs:
+            if program == 'Python':
+                self.command_list.append('sudo apt-get install python 3.9.*')
+            elif program == 'PyCharm':
+                self.command_list.append('sudo snap install pycharm-community --classic')
+            elif program == 'GIT':
+                self.command_list.append('sudo apt-get install git')
+            elif program == 'Sublime-merge':
+                self.command_list.append('snap install sublime-merge --classic')
+
+
     def sudo_check(self):
         """ Проверка пользователя
 
         Проверяет пользователя на знание пароля sudo, что бы не возникло ошибок при установке. Если пользователь вводит
         пароль неверно 3 раза, то выход из программы
         """
-
+        os.system('killall apt')
         result = os.system('sudo apt update')
+        os.system('killall apt')
+        os.system('killall unattended-upgr')
         if bool(result) is False:
             return False
         else:
@@ -43,15 +62,11 @@ class ForLinux(Script):
         обновление этих пакетов.
         """
 
+        self.update_install()
+
         print('==== Начинаю установку! ====')
-        self.try_install('sudo killall apt')
-        self.try_install('sudo apt install python3')
-        self.try_install('sudo apt-get install python3.9.*')
-        self.try_install('sudo apt install snap')
-        self.try_install('sudo apt install git')
-        self.try_install('sudo snap install pycharm-community --classic')
-        self.try_install('sudo killall apt')
-        self.try_install('sudo apt update')
+        for command in self.command_list:
+            self.try_install(command)
         print('==== Установка завершена ====')
 
     def requirements(self):

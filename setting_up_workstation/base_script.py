@@ -14,6 +14,32 @@ class Script:
     _dict_prj = {}
     _path_to_script = ''
     _path_to_run = ''
+    _all_programs = {
+        '1': 'Python',
+        '2': 'PyCharm',
+        '3': 'GIT',
+        '4': 'Sublime-merge',
+    }
+    _list_programs = []
+
+    def programs_to_install(self):
+        print('Какие программы будем ставить?')
+        for program in self._all_programs:
+            print(f'{program}: {self._all_programs[program]}')
+
+        install_code = input('(Напишите номера через пробел):\n').split()
+        while True:
+            for key in install_code:
+                if key not in self._all_programs.keys():
+                    install_code = input('Впишите только индексы через пробел!!!\n')
+                    continue
+                else:
+                    return install_code
+
+    def install_list(self):
+        keys = self.programs_to_install()
+        for key in keys:
+            self._list_programs.append(self._all_programs[key])
 
     def print_system(self, user_system):
         """ Печать названия системы
@@ -51,8 +77,8 @@ class Script:
         авторизоваться - прекращает выполнение программы
         """
         url = self.choice_project()
-        # if not url:
-        #     return None
+        if not url:
+            return None
 
         print('==== Начинаю копирование! ====')
         result = True
@@ -137,7 +163,7 @@ class Script:
         """Метод для поиска пути к стартовому файлу
 
         Returns:
-             self._path_to_run: обновлённый путь до "бегущего" скрипта
+             self.path_to_run: обновлённый путь до "бегущего" скрипта
         Problems:
             Возвращает первое вхождение => если есть установленные библиотеки, то может в них найти run.py и вернуть
             путь до него.
@@ -149,8 +175,9 @@ class Script:
             except ValueError:
                 pass
             if 'run.py' in files:
-                self._path_to_run = os.path.join(root).replace(f'./{self._path_to_script}\\', '')
-                self._path_to_run = os.path.join(root).replace(f'./{self._path_to_script}/', '')
+                self._path_to_run = os.path.join(root)
+                self._path_to_run = self._path_to_run.replace(f'./{self._path_to_script}/', '')
+                self._path_to_run = self._path_to_run.replace(f'./{self._path_to_script}\\', '')
                 return self._path_to_run
 
     def create_name(self):
@@ -226,9 +253,9 @@ class Script:
         """
 
         set_up_script = input('''Выберите вариант установки:
-            1) Полная установка
-            2) Без установки программ(скопировать проект, добавить скрипты)
-            3) Добавить только скрипты\nНапишите номер варианта(1, 2, 3): ''')
+            1) Полная установка (Устанавливаем программы по выбору из PyCharm, Python, Sublime-Merge, Git)
+            2) Без установки программ(скопировать проект, добавить скрипты по запуску, установке и обновлению ТП)
+            3) Добавить только скрипты(по запуску установке и обновлению ТП)\nНапишите номер варианта(1, 2, 3): ''')
 
         while True:
             if not set_up_script.isdigit():
