@@ -1,19 +1,35 @@
 from setting_up_workstation.base_script import Script
 import os
 import requests
+from platform import release
 
 
 class ForWidows(Script):
-    """
+    """ Класс методов установки для Windows
+
     Сценарий установки для Windows, взаимодействие осуществляется через командную строку
     """
 
+    def check_version_win(self):
+        """ Метод определения версии системы
+
+        Определение версии windows (7/10)
+        Returns:
+            version: строковый аргумент с версией системы '7'/'10'
+        """
+
+        version = release()
+        return version
+
     def check_dir(self, urls):
+        """ Метод для проверки уже скачанных программ
+
+        Нужен на случай, если установка пошла не так или программы уже оказались скачанными, что бы не скачивать всё по
+        второму разу.
+        Returns:
+            Возвращает список программ, которые находятся в папке temp (папка должна находиться в корне вместе с программой)
         """
-        Метод для проверки уже скачанных программ
-        Нужен на случай, если установка пошла не так, что бы не скачивать всё по второму разу.
-        Возвращает список программ, которые находятся в папке temp (папка должна находиться в корне вместе с программой)
-        """
+
         to_download = []
 
         # проверим программы в папке temp
@@ -26,11 +42,13 @@ class ForWidows(Script):
         return to_download
 
     def download(self):
-        """
+        """ Сценарий скачивания программ
+
         Сценарий для скачивания программ. Пути и названия программ записаны как ключи в словаре, а ссылки на
         скачивание, как значения этих ключей. Запускаются циклом.
-        Перед началом цикла создаётся "Временная папка, куда загружаются установочные образы
+        Перед началом цикла создаётся "Временная папка", куда загружаются установочные образы
         """
+
         print('==== Начинаю скачивание! ====')
         try:
             os.mkdir('temp')
@@ -43,6 +61,9 @@ class ForWidows(Script):
                 './temp/SublimeMerge.exe': 'https://download.sublimetext.com/sublime_merge_build_2056_x64_setup.exe',
                 './temp/GIT.exe': 'https://github.com/git-for-windows/git/releases/download/v2.31.1.windows.1/Git-2.31.1-64-bit.exe'}
 
+        if self.check_version_win() == '7':
+            urls.update({'./temp/Python.exe': 'https://www.python.org/ftp/python/3.8.10/python-3.8.10-amd64.exe'})
+
         # Скачиваем файлы
         need_download = self.check_dir(urls)
         for path in need_download:
@@ -53,18 +74,24 @@ class ForWidows(Script):
         print('==== Скачивание завершено! ====')
 
     def state(self):
-        """
+        """ Создание временного файла
+
         Данный метод создаёт временный файл, для продолжения установки с нужного нам момента(после перезапуска программы)
         """
+
         with open('.temp.txt', 'w', encoding='utf8') as file:
             file.write('git_key')
         os.system('attrib +h ".temp.txt"')
 
     def check_state(self):
-        """
+        """ Проверка временного файла
+
         Этот метод предназначен для чтения файла, после запуска программы. Так же он решает, что программа будет делать
         дальше
+        Returns:
+            Булевое значение, которое в дальнейшем определяет решение программы
         """
+
         key = 'git_key'
         try:
             with open('.temp.txt', 'r') as file:
@@ -74,9 +101,11 @@ class ForWidows(Script):
             return False
 
     def rm_state(self):
-        """
+        """ Удаление временного файла
+
         Этот метод нужен для удаления временного файла
         """
+
         try:
             os.system('attrib -h ".temp.txt"')
             os.system('del .temp.txt')
@@ -84,7 +113,8 @@ class ForWidows(Script):
             pass
 
     def install(self):
-        """
+        """ Установка программ из списка
+
         Установка скачанных файлов.
         Перед циклом создаёт список с программами, которые нужно будет установить, потом перемещается в расположение
         скачанных файлов. Далее, используя цикл и автоподстановку запускается процесс установки программ, которые
@@ -104,15 +134,30 @@ class ForWidows(Script):
         print('=== Установка завершена! ===')
 
     def requirements(self):
+        """ Создание bat файла для установления зависимостей
+
+        Создаёт bat файл, который устанавливает зависимости
+        """
+
         os.system('python -m venv ./technological-process-smart-s-is/.venv')
         with open(r'.\technological-process-smart-s-is\update_requirements.bat', 'w', encoding='utf8') as file:
             file.write('.venv\Scripts\python.exe -m pip install -r requirements.txt --force-reinstall\n@pause')
 
     def update_tp(self):
+        """ Создание bat файла для обновления тех процесса
+
+        Создаёт bat файл, который обновляет тех процесс
+        """
+
         with open(r'.\technological-process-smart-s-is\update_tp.bat', 'w', encoding='utf8') as file:
             file.write('git pull origin master develop\n@pause')
 
     def run_tp(self):
+        """ Создание bat файла по запуску тех процесса
+
+        Создаёт bat файл, который устанавливает зависимости
+        """
+
         with open(r'.\technological-process-smart-s-is\run_tp.bat', 'w', encoding='utf8') as file:
             file.write(r'''setlocal
             set PYTHONPATH=%cd%
@@ -121,6 +166,12 @@ class ForWidows(Script):
             @pause''')
 
     def full_setup(self):
+        """ Сценарий полной установки
+
+        Сценарий полной установки. Включает в себя скачивание, установку, клонирование репозитория
+        и добавление bat файлов
+        """
+
         if not self.check_state():
             __system = 'Windows'
             self.print_system(__system)
@@ -138,6 +189,11 @@ class ForWidows(Script):
             input('Установка полностью закончена\nНажмите "ENTER" что бы выйти')
 
     def base_setup(self):
+        """ Сценарий базовой установки
+
+        Сценарий базовой установки включает в себя клонирование репозитория. и добавление bat файлов в него
+        """
+
         self.check_git_authentication()
         self.git_config()
         self.requirements()
@@ -146,12 +202,24 @@ class ForWidows(Script):
         input('Установка полностью закончена\nНажмите "ENTER" что бы выйти')
 
     def minimal_setup(self):
+        """ Сценарий минимальной установки
+
+        Этот сценарий включает в себя только лишь добавление bat файлов в репозиторий
+        """
+
         self.requirements()
         self.update_tp()
         self.run_tp()
         input('Установка полностью закончена\nНажмите "ENTER" что бы выйти')
 
     def setup_choice(self, temp):
+        """ Определение выбора установки
+
+        Опираясь на выбор пользователя переходит к сценарию выполнения
+        Args:
+            temp: Номер выбранной пользователем установки
+        """
+
         if temp == 1:
             self.full_setup()
         elif temp == 2:
@@ -160,6 +228,12 @@ class ForWidows(Script):
             self.minimal_setup()
 
     def set_up(self):
+        """ Сценарий запуска программы
+
+        При запуске программы запускает метод проверки временного файла. Если файла не существует, то предложит на
+        выбор варианты установки. Если файл существует то продолжит установку с места остановки.
+        """
+
         if not self.check_state():
             value = self.setup_menu()
             self.setup_choice(value)
