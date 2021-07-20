@@ -10,6 +10,25 @@ class ForWidows(Script):
     Сценарий установки для Windows, взаимодействие осуществляется через командную строку
     """
 
+    default_urls = {'./temp/Python.exe': 'https://www.python.org/ftp/python/3.9.5/python-3.9.5-amd64.exe',
+                    './temp/PyCharm.exe': 'http://download.jetbrains.com/python/pycharm-community-2021.1.1.exe?_gl=1*1vc7rdn*_ga*Mjg3NTg4NjkzLjE2MjEzNDQ5MTc.*_ga_V0XZL7QHEB*MTYyMTg1OTAzNi4zLjEuMTYyMTg1OTI4OC4w&_ga=2.209779037.933493779.1621855103-287588693.1621344917',
+                    './temp/SublimeMerge.exe': 'https://download.sublimetext.com/sublime_merge_build_2056_x64_setup.exe',
+                    './temp/GIT.exe': 'https://github.com/git-for-windows/git/releases/download/v2.31.1.windows.1/Git-2.31.1-64-bit.exe'}
+
+    def update_install_urls(self):
+        self.install_list()
+        urls = {}
+        for program in self._list_programs:
+            if program == 'Python':
+                urls.update({'./temp/Python.exe': 'https://www.python.org/ftp/python/3.9.5/python-3.9.5-amd64.exe'})
+            elif program == 'PyCharm':
+                urls.update({'./temp/PyCharm.exe': 'http://download.jetbrains.com/python/pycharm-community-2021.1.1.exe?_gl=1*1vc7rdn*_ga*Mjg3NTg4NjkzLjE2MjEzNDQ5MTc.*_ga_V0XZL7QHEB*MTYyMTg1OTAzNi4zLjEuMTYyMTg1OTI4OC4w&_ga=2.209779037.933493779.1621855103-287588693.1621344917'})
+            elif program == 'GIT':
+                urls.update({'./temp/GIT.exe': 'https://github.com/git-for-windows/git/releases/download/v2.31.1.windows.1/Git-2.31.1-64-bit.exe'})
+            elif program == 'Sublime-merge':
+                urls.update({'./temp/SublimeMerge.exe': 'https://download.sublimetext.com/sublime_merge_build_2056_x64_setup.exe'})
+        return urls
+
     def check_version_win(self):
         """ Метод определения версии системы
 
@@ -56,10 +75,7 @@ class ForWidows(Script):
             print('Папка "temp" уже существует!')
             pass
 
-        urls = {'./temp/Python.exe': 'https://www.python.org/ftp/python/3.9.5/python-3.9.5-amd64.exe',
-                './temp/PyCharm.exe': 'http://download.jetbrains.com/python/pycharm-community-2021.1.1.exe?_gl=1*1vc7rdn*_ga*Mjg3NTg4NjkzLjE2MjEzNDQ5MTc.*_ga_V0XZL7QHEB*MTYyMTg1OTAzNi4zLjEuMTYyMTg1OTI4OC4w&_ga=2.209779037.933493779.1621855103-287588693.1621344917',
-                './temp/SublimeMerge.exe': 'https://download.sublimetext.com/sublime_merge_build_2056_x64_setup.exe',
-                './temp/GIT.exe': 'https://github.com/git-for-windows/git/releases/download/v2.31.1.windows.1/Git-2.31.1-64-bit.exe'}
+        urls = self.update_install_urls()
 
         if self.check_version_win() == '7':
             urls.update({'./temp/Python.exe': 'https://www.python.org/ftp/python/3.8.10/python-3.8.10-amd64.exe'})
@@ -139,8 +155,8 @@ class ForWidows(Script):
         Создаёт bat файл, который устанавливает зависимости
         """
 
-        os.system('python -m venv ./technological-process-smart-s-is/.venv')
-        with open(r'.\technological-process-smart-s-is\update_requirements.bat', 'w', encoding='utf8') as file:
+        os.system(f'python -m venv ./{self._path_to_script}/.venv')
+        with open(rf'.\{self._path_to_script}\update_requirements.bat', 'w', encoding='utf8') as file:
             file.write('.venv\Scripts\python.exe -m pip install -r requirements.txt --force-reinstall\n@pause')
 
     def update_tp(self):
@@ -149,7 +165,7 @@ class ForWidows(Script):
         Создаёт bat файл, который обновляет тех процесс
         """
 
-        with open(r'.\technological-process-smart-s-is\update_tp.bat', 'w', encoding='utf8') as file:
+        with open(rf'.\{self._path_to_script}\update_tp.bat', 'w', encoding='utf8') as file:
             file.write('git pull origin master develop\n@pause')
 
     def run_tp(self):
@@ -158,10 +174,10 @@ class ForWidows(Script):
         Создаёт bat файл, который устанавливает зависимости
         """
 
-        with open(r'.\technological-process-smart-s-is\run_tp.bat', 'w', encoding='utf8') as file:
-            file.write(r'''setlocal
+        with open(rf'.\{self._path_to_script}\run_tp.bat', 'w', encoding='utf8') as file:
+            file.write(fr'''setlocal
             set PYTHONPATH=%cd%
-            .venv\Scripts\python.exe smart_s_is\run.py
+            .venv\Scripts\python.exe {self.find_run()}\run.py
             endlocal
             @pause''')
 
@@ -206,7 +222,8 @@ class ForWidows(Script):
 
         Этот сценарий включает в себя только лишь добавление bat файлов в репозиторий
         """
-
+        
+        self.choice_project()
         self.requirements()
         self.update_tp()
         self.run_tp()

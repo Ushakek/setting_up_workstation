@@ -8,14 +8,33 @@ class ForLinux(Script):
     Сценарий установки для Linux, взаимодействие осуществляется через командную строку
     """
 
+    command_list = [
+        'sudo apt-get install snap',
+    ]
+
+    def update_install(self):
+        self.install_list()
+        for program in self._list_programs:
+            if program == 'Python':
+                self.command_list.append('sudo apt-get install python 3.9.*')
+            elif program == 'PyCharm':
+                self.command_list.append('sudo snap install pycharm-community --classic')
+            elif program == 'GIT':
+                self.command_list.append('sudo apt-get install git')
+            elif program == 'Sublime-merge':
+                self.command_list.append('snap install sublime-merge --classic')
+
+
     def sudo_check(self):
         """ Проверка пользователя
 
         Проверяет пользователя на знание пароля sudo, что бы не возникло ошибок при установке. Если пользователь вводит
         пароль неверно 3 раза, то выход из программы
         """
-
+        os.system('killall apt')
         result = os.system('sudo apt update')
+        os.system('killall apt')
+        os.system('killall unattended-upgr')
         if bool(result) is False:
             return False
         else:
@@ -43,15 +62,11 @@ class ForLinux(Script):
         обновление этих пакетов.
         """
 
+        self.update_install()
+
         print('==== Начинаю установку! ====')
-        self.try_install('sudo killall apt')
-        self.try_install('sudo apt install python3')
-        self.try_install('sudo apt-get install python3.9.*')
-        self.try_install('sudo apt install snap')
-        self.try_install('sudo apt install git')
-        self.try_install('sudo snap install pycharm-community --classic')
-        self.try_install('sudo killall apt')
-        self.try_install('sudo apt update')
+        for command in self.command_list:
+            self.try_install(command)
         print('==== Установка завершена ====')
 
     def requirements(self):
@@ -60,10 +75,10 @@ class ForLinux(Script):
             Создаёт sh файл, который устанавливает зависимости
         """
 
-        os.system('python3.9 -m venv ./technological-process-smart-s-is/.venv ')
-        with open('./technological-process-smart-s-is/update_requirements.sh', 'w', encoding='utf8') as file:
+        os.system(f'python3.9 -m venv ./{self._path_to_script}/.venv ')
+        with open(f'./{self._path_to_script}/update_requirements.sh', 'w', encoding='utf8') as file:
             file.write('.venv/bin/python3 -m pip install -r requirements.txt --force-reinstall')
-        os.system('chmod u+x ./technological-process-smart-s-is/update_requirements.sh')
+        os.system(f'chmod u+x ./{self._path_to_script}/update_requirements.sh')
 
     def update_tp(self):
         """ Создание sh файла для обновления тех процесса
@@ -71,9 +86,9 @@ class ForLinux(Script):
         Создаёт sh файл, который обновляет тех процесс
         """
 
-        with open('./technological-process-smart-s-is/update_tp.sh', 'w', encoding='utf8') as file:
+        with open(f'./{self._path_to_script}/update_tp.sh', 'w', encoding='utf8') as file:
             file.write('git pull origin master develop')
-        os.system('chmod u+x ./technological-process-smart-s-is/update_tp.sh')
+        os.system(f'chmod u+x ./{self._path_to_script}/update_tp.sh')
 
     def run_tp(self):
         """ Создание sh файла по запуску тех процесса
@@ -81,11 +96,11 @@ class ForLinux(Script):
         Создаёт sh файл, который устанавливает зависимости
         """
 
-        with open('./technological-process-smart-s-is/run_tp.sh', 'w', encoding='utf8') as file:
-            file.write('''source .venv/bin/activate
+        with open(f'./{self._path_to_script}/run_tp.sh', 'w', encoding='utf8') as file:
+            file.write(f'''source .venv/bin/activate
             export PYTHONPATH=$PYTHONPATH:./
-            python3 ./smart_s_is/run.py''')
-        os.system('chmod u+x ./technological-process-smart-s-is/run_tp.sh')
+            python3 {self.find_run()}/run.py''')
+        os.system(f'chmod u+x ./{self._path_to_script}/run_tp.sh')
 
     def full_setup(self):
         """ Сценарий полной установки
@@ -94,12 +109,13 @@ class ForLinux(Script):
         и добавление sh файлов
         """
 
-        self.install()
-        self.check_git_authentication()
-        self.git_config()
-        self.requirements()
-        self.update_tp()
-        self.run_tp()
+        if not self.sudo_check():
+            self.install()
+            self.check_git_authentication()
+            self.git_config()
+            self.requirements()
+            self.update_tp()
+            self.run_tp()
 
     def base_setup(self):
         """ Создание sh файла по запуску тех процесса
@@ -118,7 +134,7 @@ class ForLinux(Script):
 
         Этот сценарий включает в себя только лишь добавление sh файлов в репозиторий
         """
-
+        self.choice_project()
         self.requirements()
         self.update_tp()
         self.run_tp()
@@ -147,6 +163,5 @@ class ForLinux(Script):
         value = self.setup_menu()
         __system = 'Linux'
         self.print_system(__system)
-        if not self.sudo_check():
-            self.setup_choice(value)
-            input('Установка полностью закончена\nНажмите "ENTER" что бы выйти')
+        self.setup_choice(value)
+        input('Установка полностью закончена\nНажмите "ENTER" что бы выйти')
